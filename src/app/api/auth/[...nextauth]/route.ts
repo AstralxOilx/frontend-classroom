@@ -1,7 +1,29 @@
 import { Backend_URL } from "@/lib/constants";
 import NextAuth, { NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+
+async function refreshToken(token: JWT): Promise<JWT> {
+
+    console.log(token.backendToken)
+    const res = await fetch(`${Backend_URL}/auth/refresh`, {
+        method: "POST",
+        headers: {
+            authorization: `Refresh ${token.backendToken.refresh_token}`
+        },
+    });
+
+    const response = await res.json();
+
+    console.log('Refresh')
+    console.log(response);
+
+    return {
+        ...token,
+        backendToken: response,
+    }
+}
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -24,10 +46,7 @@ export const authOptions: NextAuthOptions = {
 
                 if (res.ok) {
                     const user = await res.json();
-                    return {
-                        ...user,
-                        access_token: user.accessToken,
-                    };
+                    return user;
                 }
                 return null;  // กรณีข้อมูลไม่ถูกต้อง
             },
@@ -39,19 +58,21 @@ export const authOptions: NextAuthOptions = {
             if (user) return { ...token, ...user }
             // console.log("tokend")
             // console.log(token)
-
-            return token;
+            // ตรวจสอบว่า token หมดอายุหรือยัง
+            const isExpired = new Date().getTime() > token.backendToken.expiresIn;
+            if (isExpired) {
+                return await refreshToken(token); // รีเฟรช token
+            }
+            return token; 
         },
 
         async session({ token, session }) {
-            session.accessToken = token.accessToken
-            session.roleName = token.roleName
-            session.fname =token.fname
-            session.lname = token.lname
+            session.backendToken = token.backendToken
+            session.user = token.user
             return session
 
         },
-    }, 
+    },
 
 }
 

@@ -14,6 +14,11 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession(); 
+
+  useEffect(()=>{
+
+  },[session])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -41,7 +46,7 @@ export default function LoginForm() {
       credentials: 'include', // ส่ง cookies ไปกับคำขอ
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${session?.accessToken}` // ตั้งค่าคุกกี้ใน header
+        "Authorization": `Bearer ${session?.backendToken.access_token}` // ตั้งค่าคุกกี้ใน header
       },
     });
 
@@ -56,11 +61,11 @@ export default function LoginForm() {
     }
   };
 
-
+  console.log(session)
 
   return (
     <>
-
+       
       <Button onClick={findProfile} >FindProfile</Button>
       <Button variant={"destructive"} onClick={() => { signOut() }}>Sign out</Button>
       <form onSubmit={handleSubmit}>

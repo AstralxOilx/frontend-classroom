@@ -22,11 +22,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 import { Backpack, BellOff, BellRing, ChartNoAxesGantt, LayoutGrid, LogOut, School, Settings, UserCog } from "lucide-react";
@@ -186,14 +186,14 @@ export default function AppHubSlider() {
                                                     <AvatarImage src="https://github.com/shadcn.png" />
                                                     <AvatarFallback>
                                                         {
-                                                            session?.fname ?
-                                                                session?.fname.charAt(0).toUpperCase() : 'e'
+                                                            session?.user.fname ?
+                                                                session?.user.fname.charAt(0).toUpperCase() : 'e'
                                                         }
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 <p>
-                                                    {session?.fname ?
-                                                        session?.fname.charAt(0).toUpperCase() + session?.fname.slice(1).toLowerCase() : 'err'}
+                                                    {session?.user.fname ?
+                                                        session?.user.fname.charAt(0).toUpperCase() + session?.user.fname.slice(1).toLowerCase() : 'err'}
                                                 </p>
                                             </div>
 
@@ -208,8 +208,8 @@ export default function AppHubSlider() {
                                         <div className="flex gap-1 text-gray-600 dark:text-gray-300">
                                             <ChartNoAxesGantt />
                                             {
-                                                session?.roleName ?
-                                                    session?.roleName.charAt(0).toUpperCase() + session?.roleName.slice(1).toLowerCase() : 'err'
+                                                session?.user.roleName ?
+                                                    session?.user.roleName.charAt(0).toUpperCase() + session?.user.roleName.slice(1).toLowerCase() : 'err'
                                             }
 
                                         </div>
@@ -260,11 +260,20 @@ export default function AppHubSlider() {
                                     hover:bg-primary hover:text-gray-200 
                                     transition-all duration-500 ease-in-out shadow-md`}
                             >
-                                <div className="grid items-center text-center">
-                                    <div className="text-md w-10 h-10 grid justify-center items-center">
-                                        <LayoutGrid strokeWidth={2} size={25} />
-                                    </div>
-                                </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <div className="grid items-center text-center">
+                                                <div className="text-md w-10 h-10 grid justify-center items-center">
+                                                    <LayoutGrid strokeWidth={2} size={25} />
+                                                </div>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>แดช บอร์ด</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                                 {isSidebarOpen ? <p>แดช บอร์ด</p> : null}
                             </div>
 
@@ -278,11 +287,20 @@ export default function AppHubSlider() {
                                     hover:bg-primary hover:text-gray-200 
                                     transition-all duration-500 ease-in-out shadow-md`}
                             >
-                                <div className="grid items-center text-center">
-                                    <div className="text-md w-10 h-10 grid justify-center items-center">
-                                        <School strokeWidth={2} size={25} />
-                                    </div>
-                                </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <div className="grid items-center text-center">
+                                                <div className="text-md w-10 h-10 grid justify-center items-center">
+                                                    <School strokeWidth={2} size={25} />
+                                                </div>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>ห้องเรียน</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                                 {isSidebarOpen ? <p>ห้องเรียน</p> : null}
                             </div>
 
@@ -295,11 +313,20 @@ export default function AppHubSlider() {
                                     : 'bg-secondary text-gray-600 dark:text-gray-300'
                                     } flex gap-1 justify-start items-center cursor-pointer rounded-md border hover:bg-primary hover:text-gray-200 transition-all duration-500 ease-in-out shadow-md`}
                             >
-                                <div className="grid items-center text-center">
-                                    <div className="text-md w-10 h-10 grid justify-center items-center">
-                                        <Backpack strokeWidth={2} size={25} />
-                                    </div>
-                                </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <div className="grid items-center text-center">
+                                                <div className="text-md w-10 h-10 grid justify-center items-center">
+                                                    <Backpack strokeWidth={2} size={25} />
+                                                </div>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>การบ้าน</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                                 {isSidebarOpen ? <p>การบ้าน</p> : null}
                             </div>
 
@@ -315,27 +342,34 @@ export default function AppHubSlider() {
                                     hover:bg-primary hover:text-gray-200 
                                     transition-all duration-500 ease-in-out shadow-md`}
                             >
-                                <div className=" relative grid items-center text-center ">
-                                    <div className="text-md w-10 h-10 grid justify-center items-center">
-                                        {
-                                            notification ? (
-                                                <BellRing strokeWidth={2} size={25} />
-                                            ) : (
-                                                <BellOff strokeWidth={2} size={25} />
-                                            )
-                                        }
-                                    </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <div className=" relative grid items-center text-center ">
+                                                <div className="text-md w-10 h-10 grid justify-center items-center">
+                                                    {
+                                                        notification ? (
+                                                            <BellRing strokeWidth={2} size={25} />
+                                                        ) : (
+                                                            <BellOff strokeWidth={2} size={25} />
+                                                        )
+                                                    }
+                                                </div>
 
-                                    {isSidebarOpen ?
-                                        null
-                                        : <div>
-                                            <span className="absolute bottom-8 left-8 inline-flex h-3 w-3 animate-ping  rounded-full bg-orange-500 opacity-30"></span>
-                                            <span className="absolute bottom-8 left-8 inline-flex h-3 w-3 rounded-full bg-red-600 opacity-90"></span>
-                                        </div>
-                                    }
-
-
-                                </div>
+                                                {isSidebarOpen ?
+                                                    null
+                                                    : <div>
+                                                        <span className="absolute bottom-8 left-8 inline-flex h-3 w-3 animate-ping  rounded-full bg-orange-500 opacity-30"></span>
+                                                        <span className="absolute bottom-8 left-8 inline-flex h-3 w-3 rounded-full bg-red-600 opacity-90"></span>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>การแจ้งเตือน</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                                 {isSidebarOpen ?
                                     <div>
                                         <p>การแจ้งเตือน</p>
@@ -357,16 +391,23 @@ export default function AppHubSlider() {
                                     hover:bg-primary hover:text-gray-200 
                                     transition-all duration-500 ease-in-out shadow-md`}
                             >
-                                <div className="grid items-center text-center">
-                                    <div className="text-md w-10 h-10 grid justify-center items-center">
-                                        <UserCog strokeWidth={2} size={25} />
-                                    </div>
-                                </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <div className="grid items-center text-center">
+                                                <div className="text-md w-10 h-10 grid justify-center items-center">
+                                                    <UserCog strokeWidth={2} size={25} />
+                                                </div>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>ตั้งค่าโปรไฟล์</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                                 {isSidebarOpen ? <p>ตั้งค่าโปรไฟล์</p> : null}
                             </div>
-
                         </div>
-
 
                         {/* ส่วนล่าง */}
                         <div className="grid gap-1 w-full">
@@ -381,16 +422,16 @@ export default function AppHubSlider() {
                                                         <AvatarImage src="https://github.com/shadcn.png" />
                                                         <AvatarFallback>
                                                             {
-                                                                session?.fname ?
-                                                                    session?.fname.charAt(0).toUpperCase() : 'e'
+                                                                session?.user.fname ?
+                                                                    session?.user.fname.charAt(0).toUpperCase() : 'e'
                                                             }
                                                         </AvatarFallback>
                                                     </Avatar>
                                                 </div>
                                                 {isSidebarOpen ?
                                                     <p>
-                                                        {session?.fname ?
-                                                            session?.fname.charAt(0).toUpperCase() + session?.fname.slice(1).toLowerCase() : 'err'}
+                                                        {session?.user.fname ?
+                                                            session?.user.fname.charAt(0).toUpperCase() + session?.user.fname.slice(1).toLowerCase() : 'err'}
                                                     </p>
                                                     : null}
                                             </div>
@@ -398,8 +439,8 @@ export default function AppHubSlider() {
                                         <DropdownMenuContent>
                                             <DropdownMenuLabel>
                                                 <p>
-                                                    {session?.fname ?
-                                                        session?.fname.charAt(0).toUpperCase() + session?.fname.slice(1).toLowerCase() : 'err'}
+                                                    {session?.user.fname ?
+                                                        session?.user.fname.charAt(0).toUpperCase() + session?.user.fname.slice(1).toLowerCase() : 'err'}
                                                 </p>
                                             </DropdownMenuLabel>
                                             <DropdownMenuSeparator />
@@ -407,8 +448,8 @@ export default function AppHubSlider() {
                                                 <div className="flex gap-1 text-gray-600 dark:text-gray-300">
                                                     <ChartNoAxesGantt strokeWidth={2} />
                                                     <p>{
-                                                        session?.roleName ?
-                                                            session?.roleName.charAt(0).toUpperCase() + session?.roleName.slice(1).toLowerCase() : 'err'
+                                                        session?.user.roleName ?
+                                                            session?.user.roleName.charAt(0).toUpperCase() + session?.user.roleName.slice(1).toLowerCase() : 'err'
                                                     }
                                                     </p>
                                                 </div>
